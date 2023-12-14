@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-
 
  
 #include <cmath> //abs, pow, sin, cos, tan
@@ -56,57 +54,9 @@ const vector<int> dxs8 = {1, 0, -1, 0, -1, -1, 1, 1};
 const vector<int> dys8 = {0, 1, 0, -1, -1, 1, -1, 1};
 int inf = 1<<30;
 ll INF = (1LL<<60);
-ll mod = 998244353LL;
-int h, w, n;
+ll mod = 998244353LL,amari=1000000007LL;
 
-int f() {
-    char c[109][109];
-    int sx, sy, gx, gy, dist[109][109], kyori[109][109];
- 
-    rep1(i, h) rep1(j, w) {
-        cin >> c[i][j];
-        if (c[i][j] == 'S') {
-            sx = i; sy = j;
-        }
-        if (c[i][j] == 'G') {
-            gx = i; gy =  j;
-        }
-    }
-    queue<pii> Q;
-    rep1(i, h) rep1(j, w) dist[i][j] = -inf;
-    rep1(i, h) rep1(j, w) kyori[i][j] = inf;
-    dist[sx][sy] = kyori[sx][sy] = 0;
-    Q.push({sx, sy});
-    while(!Q.empty()) {
-        int px = Q.front().first, py = Q.front().second; Q.pop();
-        rep(i, 4) {
-            int nx = px +dxs[i], ny = py + dys[i];
-            if (nx == 0 || nx == h+1 || ny == 0 || ny == w+1 || kyori[px][py] >= kyori[nx][ny]) continue;
-            int val;
-            if (c[nx][ny] == 'G' ) val = 0;
-            else val = c[nx][ny] - '0';
-            chmax(dist[nx][ny], dist[px][py] + val);
-            if (kyori[nx][ny] == inf){
-                kyori[nx][ny] = kyori[px][py] + 1;
-                Q.push({nx,ny});
-            }    
-            
-        }
-    }
-    // rep1(i, h) {
-    //     rep1(j, w) cout << dist[i][j] << ' ';
-    //     cout << endl;
-    // }
-
-    return dist[gx][gy];
-}
+ll dp[19][19][3];
 int main() {
-    cin >> h >> w >> n;
-    int res = 0;
-    while(n--) {
-        res += f();
-        
-    }
-
-    cout << res << endl;
+    
 }
