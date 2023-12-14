@@ -60,70 +60,48 @@ int inf = 1<<30;
 ll INF = (1LL<<60);
 ll mod = 998244353LL;
 
-long long Power(long long a, long long b, long long m) {
-	long long p = a, Answer = 1;
-	for (int i = 0; i < 30; i++) {
-		int wari = (1 << i);
-		if ((b / wari) % 2 == 1) {
-			Answer = (Answer * p) % m; // 「a の 2^i 乗」が掛けられるとき
-		}
-		p = (p * p) % m;
-	}
-	return Answer;
+int ind[250009], p[250009];
+ll  dp[250009], unti[250009], diff;
+vi G[250009];
+int n;
+    
+ll a[250009], after[250009];
+bool visited[250009];
+void dfs(int pos) {
+    visited[pos] = true;
+    for (auto nex: G[pos]) {
+        if (!visited[nex]) dfs(nex);
+    }
 }
-
-// a ÷ b を m で割った余りを返す関数
-long long Division(long long a, long long b, long long m) {
-	return (a * Power(b, m - 2, m)) % m;
-}
-
-// nCr mod 1000000007 を返す関数
-long long ncr(int n, int r) {
-	const long long M = mod;
-
-	// 手順 1: 分子 a を求める
-	long long a = 1;
-	for (int i = 1; i <= n; i++) a = (a * i) % M;
-
-	// 手順 2: 分母 b を求める
-	long long b = 1;
-	for (int i = 1; i <= r; i++) b = (b * i) % M;
-	for (int i = 1; i <= n - r; i++) b = (b * i) % M;
-
-	// 手順 3: 答えを求める
-	return Division(a, b, M);
-}
-
-int n, m, k, even = 0, odd = 0;
-vi G[200009];
 int main () {
-   cin >> n>> m>> k;
-   rep1(i, m) {
-    int u, v;
-    cin  >> u >> v;
-    G[u].push_back(v);
-    G[v].push_back(u);
-   }
-   rep1(i, n) {
-    if ((int)G[i].size() %2 == 0) even++;
-    else odd++;
-   }
-   ll res = 0;
-   rep(i, min(odd, k)) {
-      if (i %2 == 1) continue;
-      int pos = k-i;
-      if (pos < 0) continue;
-      res = (res + (ncr(odd, i)*ncr(even,pos))%mod)%mod;
-      //res = (res + (ncr(odd, i)*ncr(even,pos2))%mod)%mod;
-   }
+    
+    cin >> n;
+    rep1(i, n) cin >> a[i];
+    rep2(i, 2, n+1) {
+        cin >> p[i];
+        G[p[i]].push_back(i);
+        ind[p[i]]++;
+    }
+    dfs(1);
+    rep1(pos, n) {
+        if (!visited[pos]) continue;
+        for (auto nex: G[pos]) if (visited[nex]) dp[nex] = max(dp[nex], dp[pos]+1LL);
+    }
+    rep1(i, n) {
+        unti[(int)dp[i]] += a[i];
+    }
+    for (int i = n; i >= 1; i--) {
+        if (unti[i] == 0) continue;
+        diff = unti[i];
+        break;
+    }
+  
 
-   rep(i, min(odd, n-k)) {
-      if (i %2 == 1) continue;
-      int pos = n-k-i;
-      if (pos < 0) continue;
-      res = (res + (ncr(odd, i)*ncr(even,pos))%mod)%mod;
-      //res = (res + (ncr(odd, i)*ncr(even,pos2))%mod)%mod;
-   }
-
-   cout << res << endl;
+    if (diff == 0) {
+        if (a[1] == 0) cout << 0 << endl;
+        else if (a[1] > 0) cout << '+' << endl;
+        else cout << '-' << endl;
+    }
+    else if (diff > 0) cout << '+' << endl;
+    else cout << '-' << endl;
 } 

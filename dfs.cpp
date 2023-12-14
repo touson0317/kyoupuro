@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+
 #include <atcoder/all>
  
 #include <cmath> //abs, pow, sin, cos, tan
